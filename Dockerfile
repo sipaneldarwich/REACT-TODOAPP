@@ -17,8 +17,8 @@ CMD ["npm", "run", "start"]
 # docker run -v .:/app -p 3000:3000 react tail -f /dev/null
 # ```
 # current folder change permissions
-## in wsl chmod -R 777 .
-#
+# # in wsl chmod -R 777 .
+
 # inside conainer run
 # ```bash
 # npm install
