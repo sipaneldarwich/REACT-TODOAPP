@@ -1,28 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-import { useState } from 'react';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState } from "react";
+import { computeHeadingLevel } from "@testing-library/react";
 
 function App() {
   const [todos, setTodos] = useState([
     {
       id: 1,
-      title: 'fix laptop',
+      title: "fix laptop",
       isCompleted: false,
+      isEditing: false,
     },
     {
       id: 2,
-      title: 'pay bills',
+      title: "pay bills",
       isCompleted: true,
+      isEditing: false,
     },
     {
       id: 3,
-      title: 'learn react',
+      title: "learn react",
       isCompleted: false,
-    }
-  ]
-  );
+      isEditing: false,
+    },
+  ]);
 
-  const [todoInput, setTodoInput] = useState('');
+  const [todoInput, setTodoInput] = useState("");
   const [idForTodo, setIdForTodo] = useState(4);
 
   function addTodo(event) {
@@ -36,17 +39,59 @@ function App() {
         id: idForTodo,
         title: todoInput,
         isCompleted: false,
-      }])
+        isEditing: false,
+      },
+    ]);
 
-    setTodoInput('');
-    setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
+    setTodoInput("");
+    setIdForTodo((prevIdForTodo) => prevIdForTodo + 1);
   }
 
   function deleteTodo(id) {
-    setTodos([...todos.filter(todo => todo.id !== id)])
+    setTodos([...todos.filter((todo) => todo.id !== id)]);
   }
   function handleChange(event) {
     setTodoInput(event.target.value);
+  }
+
+  function completeTodo(id) {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isCompleted = !todo.isCompleted;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  function toggleEdit(id) {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isEditing = !todo.isEditing;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  function updateTodo(event, id) {
+    toggleEdit(id);
+    if (event.target.value.trim().length == 0) {
+      return;
+    }
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.title = event.target.value;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
   }
   return (
     <div className="todo-app-container">
@@ -62,12 +107,39 @@ function App() {
         </form>
 
         <ul className="todo-list">
-          {todos.map((todo, index) => (
+          {todos.map((todo) => (
             <li key={todo.id} className="todo-item-container">
               <div className="todo-item">
-                <input type="checkbox" />
-                <span className="todo-item-label">{todo.title}</span>
-                {/* <input type="text" className="todo-item-input" value="Finish React Series" /> */}
+                <input
+                  type="checkbox"
+                  defaultChecked={todo.isCompleted}
+                  onChange={() => completeTodo(todo.id)}
+                />
+                {!todo.isEditing ? (
+                  <span
+                    onDoubleClick={() => toggleEdit(todo.id)}
+                    className={`todo-item-label ${
+                      todo.isCompleted ? "line-through" : ""
+                    }`}
+                  >
+                    {todo.title}
+                  </span>
+                ) : (
+                  <input
+                    type="text"
+                    className="todo-item-input"
+                    onBlur={(event) => updateTodo(event, todo.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        updateTodo(event, todo.id);
+                      } else if (event.key === "Escape") {
+                        toggleEdit(todo.id);
+                      }
+                    }}
+                    defaultValue={todo.title}
+                    autoFocus
+                  />
+                )}
               </div>
               <button className="x-button" onClick={() => deleteTodo(todo.id)}>
                 <svg
