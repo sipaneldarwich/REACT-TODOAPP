@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState } from "react";
-import NoTodos from './Components/NoTodos';
-import TodoForm from './Components/TodoForm';
-import TodoList from './Components/TodoList';
+import NoTodos from "./Components/NoTodos";
+import TodoForm from "./Components/TodoForm";
+import TodoList from "./Components/TodoList";
 function App() {
   const [todos, setTodos] = useState([
     {
@@ -84,6 +84,35 @@ function App() {
     setTodos(updatedTodos);
   }
 
+  function todosFiltered(filter) {
+    if (filter === "all") {
+      return todos;
+    }
+    if (filter === "completed") {
+      return todos.filter((todo) => todo.isCompleted);
+    }
+    if (filter === "active") {
+      return todos.filter((todo) => !todo.isCompleted);
+    }
+  }
+
+  function remaining() {
+    return todos.filter((todo) => !todo.isCompleted).length;
+  }
+
+  function completeAllTodos() {
+    console.log("x");
+    const updatedTodos = todos.map((todo) => {
+      todo.isCompleted = true;
+      return todo;
+    });
+    setTodos(updatedTodos);
+  }
+
+  function clearCompleted() {
+    const updatedTodos = todos.filter((todo) => todo.isCompleted === false);
+    setTodos(updatedTodos);
+  }
   return (
     <div className="todo-app-container">
       <div className="todo-app">
@@ -96,6 +125,10 @@ function App() {
             updateTodo={updateTodo}
             deleteTodo={deleteTodo}
             toggleEdit={toggleEdit}
+            todosFiltered={todosFiltered}
+            remaining={remaining}
+            completeAllTodos={completeAllTodos}
+            clearCompleted={clearCompleted}
           />
         ) : (
           <NoTodos />
