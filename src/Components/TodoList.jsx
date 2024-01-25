@@ -12,7 +12,7 @@ TodoList.props = {
   deleteTodo: PropTypes.func.isRequired,
   toggleEdit: PropTypes.func.isRequired,
   todosFiltered: PropTypes.func.isRequired,
-  remaining: PropTypes.func.isRequired,
+  remaining: PropTypes.number.isRequired,
   completeAllTodos: PropTypes.func.isRequired,
   clearCompleted: PropTypes.func.isRequired,
 };
