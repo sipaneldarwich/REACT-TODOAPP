@@ -25,7 +25,7 @@ CMD ["npm", "run", "start"]
 # ```
 # readd the scripts to package.json 
 # ```bash
-# npm run start
+# npm start
 # ```
 # http://localhost:3000/
 # # Issues
