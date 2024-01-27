@@ -3,31 +3,14 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import NoTodos from "./Components/NoTodos";
 import TodoForm from "./Components/TodoForm";
 import TodoList from "./Components/TodoList";
-function App() {
-  const [name, setName] = useState("");
-  const nameInputEl = useRef(null);
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "fix laptop",
-      isCompleted: false,
-      isEditing: false,
-    },
-    {
-      id: 2,
-      title: "pay bills",
-      isCompleted: true,
-      isEditing: false,
-    },
-    {
-      id: 3,
-      title: "learn react",
-      isCompleted: false,
-      isEditing: false,
-    },
-  ]);
+import useLocalStorage from "./hooks/useLoalStorage";
 
-  const [idForTodo, setIdForTodo] = useState(4);
+function App() {
+  const [name, setName] = useLocalStorage('name', '');
+  const nameInputEl = useRef(null);
+  const [todos, setTodos] = useLocalStorage('todos',[]);
+
+  const [idForTodo, setIdForTodo] = useLocalStorage('idForTodo', 1);
 
   function addTodo(todoTitle) {
     setTodos([

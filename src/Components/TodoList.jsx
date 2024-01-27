@@ -4,6 +4,7 @@ import TodoFilter from "./TodoFilter";
 import TodoItemsRemainig from "./TodoItemsRemainig";
 import TodoCompleteAllTodos from "./TodoCompleteAllTodos";
 import TodoClearCompleted from "./TodoClearCompleted";
+import useToggle from "./../hooks/useToggle";
 
 TodoList.props = {
   todos: PropTypes.array.isRequired,
@@ -18,6 +19,8 @@ TodoList.props = {
 };
 function TodoList(props) {
   const [filter, setFilter] = useState("all");
+  const [featuresOneVisible, setFeaturesOneVisible] = useToggle(false);
+  const [featuresTwoVisible, setFeaturesTwoVisible] = useToggle(false);
 
   return (
     <>
@@ -78,19 +81,32 @@ function TodoList(props) {
           </li>
         ))}
       </ul>
-      <div className="check-all-container">
-        <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
-        <TodoItemsRemainig remaining={props.remaining} />
+
+      <div className="toggles-container">
+        <button onClick={setFeaturesOneVisible} className="button">
+          Features One Toggle
+        </button>
+        <button onClick={setFeaturesTwoVisible} className="button">
+          Features Two Toggle
+        </button>
       </div>
 
-      <div className="other-buttons-container">
-        <TodoFilter
-          todosFiltered={props.todosFiltered}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <TodoClearCompleted clearCompleted={props.clearCompleted} />
-      </div>
+      {featuresOneVisible && (
+        <div className="check-all-container">
+          <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
+          <TodoItemsRemainig remaining={props.remaining} />
+        </div>
+      )}
+      {featuresTwoVisible && (
+        <div className="other-buttons-container">
+          <TodoFilter
+            todosFiltered={props.todosFiltered}
+            filter={filter}
+            setFilter={setFilter}
+          />
+          <TodoClearCompleted clearCompleted={props.clearCompleted} />
+        </div>
+      )}
     </>
   );
 }

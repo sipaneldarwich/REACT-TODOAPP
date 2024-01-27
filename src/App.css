@@ -146,6 +146,10 @@ h2 {
   text-align: center;
 }
 
+.toggles-container {
+  margin: 20px 0;
+}
+
 .name-container {
   margin-bottom: 40px;
 }
